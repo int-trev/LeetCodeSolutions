@@ -10,13 +10,9 @@ namespace AnotherLeetcodeProj
     {
         static void Main(string[] args)
         {
-            LongestSubstringWithoutRepeats tester = new LongestSubstringWithoutRepeats();
-            Console.WriteLine(tester.LengthOfLongestSubstring("dvdf"));
-
-            RomanToIntProblem tester2 = new RomanToIntProblem();
-            Console.WriteLine(tester2.RomanToInt("MMCCCXCIX"));
-
-            Console.Read();
+            ValidPalindrome validPalindrome = new ValidPalindrome();
+            Console.WriteLine(validPalindrome.IsPalindrome("A man, a plan, a canal: Panama"));
+            
             
         }
     }

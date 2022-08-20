@@ -34,14 +34,14 @@ namespace AnotherLeetcodeProj
             return comparer.Substring(0, i);
         }
 
-        public IList<int> disapp(int[] nums)
-        {
-            IList<int> list = new List<int>();
-            char[] apple = new char[8];
-            apple.Cast<String>();
-            string ban = "apple";
-            IList<IList<int>> anotherTemp = new List<IList<int>>();
+        //public IList<int> disapp(int[] nums)
+        //{
+        //    IList<int> list = new List<int>();
+        //    char[] apple = new char[8];
+        //    apple.Cast<String>();
+        //    string ban = "apple";
+        //    IList<IList<int>> anotherTemp = new List<IList<int>>();
             
-        }
+        //}
     }
 }
