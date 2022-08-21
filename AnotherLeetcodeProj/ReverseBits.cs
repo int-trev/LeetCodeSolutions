@@ -6,33 +6,47 @@ using System.Threading.Tasks;
 
 namespace AnotherLeetcodeProj
 {
-    internal class ValidPalindrome
+    internal class ReverseBits
     {
-        public bool IsPalindrome(string s)
-        {
-            StringBuilder newStringBuilder = new StringBuilder();
+        //Old implementation, less space but more computation
 
-            foreach(var character in s)
+        //public uint reverseBits(uint n)
+        //{
+        //    uint reversedNum = 0;
+        //    uint startPoint = 1;
+        //    uint comparer = 2147483648;
+        //    for(int i = 0; i < 32; i++)
+        //    {
+        //        if((n & comparer) != 0)
+        //        {
+        //            reversedNum += startPoint;
+        //        }
+        //        startPoint *= 2;
+        //        comparer /= 2;
+        //    }
+        //    return reversedNum;
+        //}
+
+        public uint reverseBits(uint n)
+        {
+            uint reversedNum = 0;
+            uint[] uints = new uint[32];
+            uints[0] = 1;
+
+            for(int i = 1; i < 32; i++)
             {
-                if(Char.IsLetter(character) || Char.IsDigit(character))
+                uints[i] = uints[i - 1] * 2;
+            }
+
+
+            for (int i = 0; i < 32; i++)
+            {
+                if ((n & uints[31 - i]) != 0)
                 {
-                    newStringBuilder.Append(character);
+                    reversedNum += uints[i];
                 }
             }
-
-            string newString = newStringBuilder.ToString().ToLower();
-
-            int beginning = 0;
-            int end = newString.Length - 1;
-
-            while (beginning < end)
-            {
-                if (newString[beginning] != newString[end])
-                    return false;
-                beginning++;
-                end--;
-            }
-            return true;
+            return reversedNum;
         }
     }
 }
