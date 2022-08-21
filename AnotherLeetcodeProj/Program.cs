@@ -10,8 +10,11 @@ namespace AnotherLeetcodeProj
     {
         static void Main(string[] args)
         {
-            ValidPalindrome validPalindrome = new ValidPalindrome();
-            Console.WriteLine(validPalindrome.IsPalindrome("A man, a plan, a canal: Panama"));
+            BinaryTreeInorderTraversal bin = new BinaryTreeInorderTraversal();
+            var num2 = new BinaryTreeInorderTraversal.TreeNode(2, null, null);
+            var num1 = new BinaryTreeInorderTraversal.TreeNode(1, null, num2);
+            var num3 = new BinaryTreeInorderTraversal.TreeNode(3, num1, null);
+            bin.InorderTraversal(num3);
             
             
         }
