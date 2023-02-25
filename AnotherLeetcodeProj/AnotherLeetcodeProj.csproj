@@ -53,10 +53,15 @@
     <Compile Include="BinaryTreePreorderTraversal.cs" />
     <Compile Include="HappyNumber.cs" />
     <Compile Include="QueueUsingStacks.cs" />
+    <Compile Include="ReducingDishes.cs" />
+    <Compile Include="PascalsTriangle.cs" />
+    <Compile Include="LinkedList.cs" />
     <Compile Include="ValidPalindrome.cs" />
     <Compile Include="ReverseBits.cs" />
     <Compile Include="RemoveElementEasy.cs" />
     <Compile Include="RemoveDuplicatesSortedArray.cs" />
+    <Compile Include="SubtreeOfAnotherSubtree.cs" />
+    <Compile Include="InvertBinaryTree.cs" />
     <Compile Include="ValidParentheses.cs" />
     <Compile Include="RomanToIntProblem.cs" />
   </ItemGroup>
