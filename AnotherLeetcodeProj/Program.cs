@@ -9,8 +9,7 @@ namespace AnotherLeetcodeProj
     internal class Program
     {
         static void Main(string[] args)
-        {  
-            Chewy chewy = new Chewy();
+        {
 
             
             

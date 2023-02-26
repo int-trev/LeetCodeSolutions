@@ -21,6 +21,11 @@ namespace AnotherLeetcodeProj
             }
             return false;
         }
+
+        public int MaxSubArray(int[] nums)
+        {
+            
+        }
         #endregion
     }
 }
