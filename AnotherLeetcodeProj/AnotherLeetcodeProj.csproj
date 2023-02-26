@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryTreeInorderTraversal.cs" />
+    <Compile Include="DataStructureLearningTrack.cs" />
+    <Compile Include="LeetCode75Level1LearningTrack.cs" />
     <Compile Include="MultipleProblems.cs" />
     <Compile Include="LongestCommonPrefixProblem.cs" />
     <Compile Include="LongestSubstringWithoutRepeats.cs" />

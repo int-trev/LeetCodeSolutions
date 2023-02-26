@@ -131,36 +131,36 @@ namespace AnotherLeetcodeProj
             return head;
         }
 
-        // Old one with O(n) runtime, O(n) space complexity
-        //public int FindDuplicate(int[] nums)
-        //{
-        //    HashSet<int> duplicates = new HashSet<int>();
-        //    for(int i = 0; i < nums.Length; i++)
-        //    {
-        //        if(duplicates.Contains(nums[i]))
-        //        {
-        //            return nums[i];
-        //        }
-        //        duplicates.Add(nums[i]);
-        //    }
-        //    return -1;
-        //}
-
-        // New one with O(n) runtime, O(1) space complexity
         public int FindDuplicate(int[] nums)
         {
-            int tortise = 0;
-            int hare = 1;
-
-            while(nums[tortise] != nums[hare] && tortise != hare)
+            HashSet<int> duplicates = new HashSet<int>();
+            for (int i = 0; i < nums.Length; i++)
             {
-                tortise = (tortise + 1) % nums.Length;
-                hare = (hare + 2) % nums.Length;
+                if (duplicates.Contains(nums[i]))
+                {
+                    return nums[i];
+                }
+                duplicates.Add(nums[i]);
             }
-            return nums[hare];
+            return -1;
         }
 
-
+        public int SingleNumber(int[] nums)
+        {
+            HashSet<int> intLeft = new HashSet<int>();
+            foreach(int i in nums)
+            {
+                if(intLeft.Contains(i))
+                {
+                    intLeft.Remove(i);
+                }
+                else
+                {
+                    intLeft.Add(i);
+                }
+            }
+            return intLeft.First();
+        }
     }
 
     public class ListNode

@@ -37,7 +37,28 @@ namespace AnotherLeetcodeProj
             node.next = head;
             return node;
         }
-        
+
+        public bool IsPalindrome(ListNode head)
+        {
+            ListNode holder = head;
+            ListNode iterator = head;
+            Stack<ListNode> stack = new Stack<ListNode>();
+            while (iterator != null)
+            {
+                stack.Push(iterator);
+                iterator = iterator.next;
+            }
+            int amount = stack.Count/2;
+            for(int i = 0; i < amount; i++)
+            {
+                ListNode node = stack.Pop();
+                if (node.val != holder.val)
+                    return false;
+                holder = holder.next;
+            }
+            return true;
+        }
+
 
     }
 
