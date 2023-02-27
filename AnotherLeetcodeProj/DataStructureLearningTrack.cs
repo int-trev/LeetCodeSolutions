@@ -24,7 +24,25 @@ namespace AnotherLeetcodeProj
 
         public int MaxSubArray(int[] nums)
         {
-            
+            int sum = int.MinValue;
+            int sumCounter = 0;
+            for(int i = 0; i < nums.Length; i++)
+            {
+                if(nums[i] < 0)
+                {
+                    if (sumCounter + nums[i] >= 0)
+                        sumCounter += nums[i];
+                    else
+                        sumCounter = 0;
+                }
+                else
+                {
+                    sumCounter += nums[i];
+                }
+                if(sumCounter > sum)
+                    sum = sumCounter;
+            }
+            return sum;
         }
         #endregion
     }

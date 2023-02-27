@@ -34,6 +34,44 @@ namespace AnotherLeetcodeProj
         }
         #endregion
         #region Day 2
+        public bool IsIsomorphic(string s, string t)
+        {
+            Dictionary<char, int> sMap = new Dictionary<char, int>();
+            HashSet<char> tSet = new HashSet<char>();
+            for(int i = 0; i < s.Length; i++)
+            {
+                if(sMap.TryGetValue(s[i], out int val))
+                {
+                    if (t[i] != t[val])
+                        return false;
+                }
+                else
+                {
+                    if (tSet.Contains(t[i]))
+                        return false;
+                    sMap.Add(s[i], i);
+                    tSet.Add(t[i]);
+                }
+            }
+            return true;
+        }
+
+        public bool IsSubsequence(string s, string t)
+        {
+            if (s.Length > t.Length)
+                return false;
+            if (s == "")
+                return true;
+            int sPointer = 0;
+            for(int i = 0; i < t.Length; i++)
+            {
+                if(t[i] == s[sPointer])
+                    sPointer++;
+                if (sPointer == s.Length)
+                    return true;
+            }
+            return false;
+        }
         #endregion
     }
 }
