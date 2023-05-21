@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -740,6 +743,198 @@ namespace AnotherLeetcodeProj
                 this.val = val;
                 this.left = left;
                 this.right = right;
+            }
+        }
+
+        public int[] GetConcatenation(int[] nums)
+        {
+            int[] ans = new int[nums.Length * 2];
+            for(int i = 0; i < nums.Length; i++)
+            {
+                ans[i] = nums[i];
+                ans[i + nums.Length] = nums[i];
+            }
+            return ans;
+        }
+
+        public int CalPoints(string[] operations)
+        {
+            Stack<int> scores = new Stack<int>();
+            foreach(var operation in operations)
+            {
+                if(operation == "+")
+                {
+                    var save = scores.Pop();
+                    var adding = scores.Peek();
+                    scores.Push(save);
+                    scores.Push(save + adding);
+                }
+                else if(operation == "C")
+                {
+                    scores.Pop();
+                }
+                else if(operation == "D")
+                {
+                    scores.Push(scores.Peek() * 2);
+                }
+                else
+                {
+                    scores.Push(Int32.Parse(operation));
+                }
+            }
+
+            int counter = 0;
+            while(scores.Count > 0)
+            {
+                counter += scores.Pop();
+            }
+
+            return counter;
+        }
+
+        public class MyLinkedList
+        {
+            public class MyDoublePointNode
+            {
+                public int val;
+                public MyDoublePointNode next;
+                public MyDoublePointNode prev;
+                public MyDoublePointNode(int val)
+                {
+                    this.val = val;
+                    prev = null;
+                    next = null;
+                }
+            }
+
+            public MyDoublePointNode head;
+            public MyDoublePointNode tail;
+            public int length;
+
+            public MyLinkedList()
+            {
+                head = null;
+                tail = null;
+                length = 0;
+            }
+
+            public int Get(int index)
+            {
+                if (index >= length)
+                    return -1;
+                var tempNode = head;
+                for (int i = 0; i < index; i++)
+                {
+                    tempNode = tempNode.next;
+                }
+                return tempNode.val;
+            }
+
+            public void AddAtHead(int val)
+            {
+                if(head == null)
+                {
+                    length++;
+                    var newNode = new MyDoublePointNode(val);
+                    head = newNode;
+                    tail = newNode;
+                }
+                else
+                {
+                    var newNode = new MyDoublePointNode(val);
+                    head.prev = newNode;
+                    newNode.next = head;
+                    head = newNode;
+                    length++;
+                }
+            }
+
+            public void AddAtTail(int val)
+            {
+                if (head == null)
+                {
+                    length++;
+                    var newNode = new MyDoublePointNode(val);
+                    head = newNode;
+                    tail = newNode;
+                }
+                else
+                {
+                    var newNode = new MyDoublePointNode(val);
+                    tail.next = newNode;
+                    newNode.prev = tail;
+                    tail = newNode;
+                    length++;
+                }
+            }
+
+            public void AddAtIndex(int index, int val)
+            {
+                if (index > length)
+                    return;
+                else if (index == length && length == 0)
+                {
+                    var newNode1 = new MyDoublePointNode(val);
+                    tail = newNode1;
+                    head = newNode1;
+                    length++;
+                    return;
+                }
+                else if(index == length)
+                {
+                    var newNode1 = new MyDoublePointNode(val);
+                    tail.next = newNode1;
+                    newNode1.prev = tail;
+                    tail = newNode1;
+                    length++;
+                    return;
+                }
+                else
+                {
+                    var newNode = new MyDoublePointNode(val);
+                    var tempNode = head;
+                    for (int i = 0; i < index; i++)
+                    {
+                        tempNode = tempNode.next;
+                    }
+
+
+                    //now need to set the new stuff
+                    newNode.prev = tempNode.prev;
+                    newNode.next = tempNode;
+                    if (tempNode.prev != null)
+                    {
+                        tempNode.prev.next = newNode;
+                    }
+
+                    if (index == 0)
+                        head = newNode;
+                    length++;
+                }
+            }
+
+            public void DeleteAtIndex(int index)
+            {
+                if (index >= length)
+                    return;
+                if (length == 0)
+                    return;
+
+                var tempNode = head;
+                for (int i = 0; i < index; i++)
+                {
+                    tempNode = tempNode.next;
+                }
+                if (tempNode.prev != null)
+                    tempNode.prev.next = tempNode.next;
+                if(tempNode.next != null)
+                    tempNode.next.prev = tempNode.prev;
+
+                if (index == 0)
+                    head = tempNode.next;
+                if (index == length - 1)
+                    tail = tempNode.prev;
+                length--;
             }
         }
     }
