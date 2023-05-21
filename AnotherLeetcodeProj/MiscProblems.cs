@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AnotherLeetcodeProj
 {
@@ -140,9 +141,20 @@ namespace AnotherLeetcodeProj
             int[] newNums = new int[nums.Length];
             int[] prefixes = new int[nums.Length];
             int[] suffixes = new int[nums.Length];
+            prefixes[0] = 1;
+            for(int i = 1; i < nums.Length; i++)
+            {
+                prefixes[i] = prefixes[i - 1] * nums[i-1];
+            }
+            suffixes[nums.Length - 1] = 1;
+            for(int i = nums.Length - 2; i >= 0; i--)
+            {
+                suffixes[i] = suffixes[i + 1] * nums[i + 1];
+            }
+
             for(int i = 0; i < nums.Length; i++)
             {
-
+                newNums[i] = prefixes[i] * suffixes[i];
             }
 
             return newNums;
@@ -581,6 +593,154 @@ namespace AnotherLeetcodeProj
             //if reach the length of s1 with no hiccups, return true
 
             //return false
+        }
+
+        public IList<IList<string>> GroupAnagrams(string[] strs)
+        {
+            //first need to make a list to hold the list of strings
+            //next, I need to write a loop to loop through strs
+            //in this loop, it needs to compare strs to each of the different cases in the list of lists first index
+            List<List<string>> returnedList = new List<List<string>>();
+            List<Dictionary<char, int>> numOccurances = new List<Dictionary<char, int>>();
+            foreach(var str in strs)
+            {
+                Dictionary<char, int> numOccuranceStr = new Dictionary<char, int>();
+                foreach(char c in str)
+                {
+                    if(numOccuranceStr.ContainsKey(c))
+                    {
+                        numOccuranceStr[c]++;
+                    }
+                    else
+                        numOccuranceStr.Add(c, 1);
+                }
+                for(int i = 0; i < returnedList.Count; i++)
+                {
+                    if()
+                    foreach(var keypair in numOccurances[i])
+                    {
+                        
+                    }
+                }
+            }
+        }
+
+        public class ListNode
+        {
+            public int val;
+            public ListNode next;
+            public ListNode(int val = 0, ListNode next = null)
+            {
+                this.val = val;
+                this.next = next;
+            }
+        }
+
+        public ListNode ReverseList(ListNode head)
+        {
+            if (head == null)
+                return null;
+            Stack<ListNode> newStack = new Stack<ListNode>();
+            while(head != null)
+            {
+                newStack.Push(head);
+                head = head.next;
+            }
+
+            ListNode newHead = newStack.Pop();
+            ListNode listNode = newHead;
+            while (newStack.Count > 0)
+            {
+                listNode.next = newStack.Pop();
+                listNode = listNode.next;
+            }
+            listNode.next = null;
+            return newHead;
+        }
+
+        public void ReorderList(ListNode head)
+        {
+            Stack<ListNode> newStack = new Stack<ListNode>();
+            ListNode node = head;
+            while(node != null)
+            {
+                newStack.Push(node);
+                node = node.next;
+            }
+            node = head;
+
+            var counter = newStack.Count;
+            for (int i = 0; i < counter / 2; i++)
+            {
+                var tempNode = newStack.Pop();
+                var othertempNode = node.next;
+                node.next = tempNode;
+                tempNode.next = othertempNode;
+                node = node.next;
+            }
+            node.next = null;
+        }
+
+        public ListNode RemoveNthFromEnd(ListNode head, int n)
+        {
+            ListNode trackingNode = head;
+            for(int i = 0; i < n; i++)
+            {
+                trackingNode = trackingNode.next;
+            }
+
+            if (trackingNode == null)
+                return head.next;
+
+            ListNode newTrackingNode = head;
+            while(trackingNode != null)
+            {
+                trackingNode = trackingNode.next;
+                if(trackingNode == null)
+                {
+                    newTrackingNode.next = newTrackingNode.next.next;
+                    break;
+                }
+                newTrackingNode = newTrackingNode.next;
+            }
+
+
+            return head;
+        }
+
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+        {
+
+        }
+
+        public int MaxDepth(TreeNode root)
+        {
+            return MaxDepthHelper(root, 0);
+        }
+
+        public int MaxDepthHelper(TreeNode root, int counter)
+        {
+            if (root == null)
+                return counter;
+            else return Math.Max(MaxDepthHelper(root.left, counter + 1), MaxDepthHelper(root.right, counter + 1));
+        }
+
+        public int DiameterOfBinaryTree(TreeNode root)
+        {
+            //I have a feeling that the diameter is really just an addition of the max depth of the left and the right of the root
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
         }
     }
 }
