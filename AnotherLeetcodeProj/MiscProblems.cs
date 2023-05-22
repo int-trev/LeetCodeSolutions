@@ -936,6 +936,32 @@ namespace AnotherLeetcodeProj
                     tail = tempNode.prev;
                 length--;
             }
+
+            public bool IsSameTree(TreeNode p, TreeNode q)
+            {
+                return HelperIsSameTree(p, q);
+            }
+
+            public bool HelperIsSameTree(TreeNode p, TreeNode q)
+            {
+                if ((p == null && q != null) || (p != null && q == null))
+                    return false;
+                else if ((p == null && q == null))
+                    return true;
+                else if ((p.val != q.val))
+                    return false;
+                else
+                    return (HelperIsSameTree(p.left, q.left) && HelperIsSameTree(p.right, q.right));
+            }
+
+            public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+            {
+                //make a recursive method that checks if p and q are found in any of its children
+                //return the upper most node where this occurs
+            }
+
+            
         }
     }
-}
+    }
+
