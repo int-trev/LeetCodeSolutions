@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -353,7 +354,22 @@ namespace AnotherLeetcodeProj
 
         public int MaxArea(int[] height)
         {
-            
+            int lowPointer = 0;
+            int highPointer = height.Length - 1;
+            int biggestArea = 0;
+            while(lowPointer != highPointer)
+            {
+                var min = Math.Min(height[lowPointer], height[highPointer]);
+                if(min * (highPointer - lowPointer) > biggestArea)
+                {
+                    biggestArea = min * (highPointer - lowPointer);
+                }
+                if(height[lowPointer] < height[highPointer])
+                    lowPointer++;
+                else
+                    highPointer--;
+            }
+            return biggestArea;
         }
 
         public int EvalRPN(string[] tokens)
@@ -960,7 +976,295 @@ namespace AnotherLeetcodeProj
                 //return the upper most node where this occurs
             }
 
-            
+            public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+            {
+                bool carrydigit = false;
+                ListNode head = new ListNode();
+                head.val = l1.val + l2.val;
+                if(head.val >=  10)
+                {
+                    carrydigit = true;
+                    head.val = head.val % 10;
+                }
+                l1 = l1.next;
+                l2 = l2.next;
+
+                ListNode temp = head;
+                
+                while(l1 != null && l2 != null)
+                {
+                    var newNode = new ListNode();
+                    int num = 0;
+                    if (carrydigit)
+                    {
+                        carrydigit = false;
+                        num = 1;
+                    }
+
+                    
+                    if (l1 == null)
+                    {
+                        newNode.val = l2.val + num;
+                        if(newNode.val >= 10)
+                        {
+                            newNode.val = newNode.val % 10;
+                            carrydigit = true;
+                        }
+                        l1 = l1.next;
+                    }
+                    else if (l2 == null)
+                    {
+                        
+                    }
+                    else
+                    {
+                        
+                        
+                    }
+
+                    
+                }
+                return head;
+            }
+
+            public IList<IList<int>> Subsets(int[] nums)
+            {
+                //add a character, check
+                //if not, remove
+                //go on to the next for loop for that full set
+
+                //initializing the holder list
+                IList<IList<int>> ListOfLists = new List<IList<int>>();
+                ListOfLists.Add(new int[0]);
+                HelperFunctionSubsets(nums, new List<int>(), ListOfLists);
+                return ListOfLists;
+            }
+
+            public void HelperFunctionSubsets(int[] nums, List<int> newList, IList<IList<int>> ints)
+            {
+                if (newList.Count == nums.Length)
+                    //return
+                    return;
+                foreach (var num in nums)
+                {
+                    var newListInner = new List<int>();
+                    foreach (var temp in newList)
+                    {
+                        newListInner.Add(temp);
+                    }
+                    //add it to the newList
+                    if (newListInner.Contains(num))
+                        return;
+                    newListInner.Add(num);
+                    newListInner.Sort();
+                    //check if newList is valid
+                    if (!IsValid(ints, newListInner))
+                        return;
+                    //if not, return
+                    //else, add it to the list and make the recursive call again
+                    ints.Add(newListInner);
+                    HelperFunctionSubsets(nums, newListInner, ints);
+                }
+            }
+
+            public bool IsValid(IList<IList<int>> ints, List<int> newList)
+            {
+                foreach (var l in ints)
+                {
+                    if (l == newList.ToArray())
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            public IList<IList<int>> CombinationSum(int[] candidates, int target)
+            {
+                
+            }
+
+
+            public void CombinationSumBackTrack(int[] candidates, int target, List<int> innerList, int sum, List<List<int>> result)
+            {
+                //if the sum is equal to the target, we have found our spot and we cut the line
+                if(sum == target)
+                {
+                    foreach(var tempResult in result)
+                    {
+                        if (tempResult==innerList)
+                            return;
+                    }
+                    result.Add(innerList);
+                    return;
+                }
+
+                //if the sum is greater than the target, we went too far, cut the line
+                else if(sum > target)
+                {
+                    return;
+                }
+
+                //if the sum is less, we continue going
+                else
+                {
+                    
+                }
+                return;
+            }
+
+            public int Trap(int[] height)
+            {
+
+            }
+
+            public IList<IList<int>> Permute(int[] nums)
+            {
+                List<int[]> ints = new List<int[]>();
+                PermuteHelper(nums, ints, new List<int>());
+                return ints.ToArray();
+            }
+
+            public void PermuteHelper(int[] nums, IList<int[]> ints, List<int> tempList)
+            {
+                if (tempList.Count == nums.Length)
+                {
+                    ints.Add(tempList.ToArray());
+                }
+                else
+                {
+                    //need to be able to skip certain elements
+                    for(int i = 0; i < nums.Length;i++)
+                    {
+                        if (tempList.Contains(nums[i]))
+                            continue;
+                        tempList.Add(nums[i]);
+                        PermuteHelper(nums, ints, tempList);
+                        tempList.Remove(nums[i]);
+                    }
+                }
+                return;
+            }
+
+
+            //edit this to only check certain spots, probably with a visited array? need some way to backtrack appropriately
+            public bool Exist(char[][] board, string word)
+            {
+                return ExistsHelper(board, word, 0, 0, 0);
+            }
+
+            public bool ExistsHelper(char[][] board, string word, int wordIndex,int r, int c)
+            {
+                //base case--acceptance
+                if (wordIndex == word.Length)
+                    return true;
+                //base case--non acceptance
+                if (r >= board.Length || c >= board[0].Length || r < 0 || c < 0)
+                    return false;
+                //backtracking, need to see if the letter at r,c is the same as the one in the word at the word index
+
+                return;
+            }
+
+            #region 1-D Dynamic Programming
+            public int ClimbStairs(int n)
+            {
+                int[] intHolder = new int[n];
+                if (n == 1)
+                    return 1;
+                if (n == 2)
+                    return 2;
+                intHolder[0] = 1;
+                intHolder[1] = 2;
+                for(int i = 2; i < n; i++)
+                {
+                    intHolder[i] = intHolder[i - 1] + intHolder[i - 2];
+                }
+                return intHolder[n - 1];
+
+            }
+
+            public int MinCostClimbingStairs(int[] cost)
+            {
+                int[] costHolder = new int[cost.Length];
+                costHolder[0] = cost[0];
+                costHolder[1] = cost[1];
+
+                for(int i = 2; i < cost.Length;i++)
+                {
+                    costHolder[i] = cost[i] + Math.Min(costHolder[i-1], costHolder[i-2]);
+                }
+
+                return Math.Min(costHolder[cost.Length - 1], costHolder[cost.Length - 2]);
+            }
+
+            //need to think about this one a bit more
+            public int Rob(int[] nums)
+            {
+                int[] newNums = new int[nums.Length];
+                if (nums.Length == 1)
+                    return nums[0];
+                newNums[0] = nums[0];
+                newNums[1] = nums[1];
+                for(int i = 2; i < nums.Length; i++)
+                {
+                    newNums[i] = newNums[i - 2] + nums[i];
+                }
+                return Math.Max(newNums[nums.Length - 1], newNums[nums.Length - 2]);
+            }
+            #endregion
+
+            public int Tribonacci(int n)
+            {
+                if (n == 0 || n == 1)
+                    return n;
+                if (n == 2)
+                    return 1;
+                int first = 0;
+                int second = 1;
+                int third = 1;
+                for(int i = 3; i <= n; i++)
+                {
+                    int temp = first + second + third;
+                    first = second;
+                    second = third;
+                    third = temp;
+                }
+                return third;
+            }
+
+            #region Queues
+            //https://leetcode.com/problems/implement-stack-using-queues/
+            public class MyStack
+            {
+
+                public MyStack()
+                {
+
+                }
+
+                public void Push(int x)
+                {
+
+                }
+
+                public int Pop()
+                {
+
+                }
+
+                public int Top()
+                {
+
+                }
+
+                public bool Empty()
+                {
+
+                }
+            }
+            #endregion
+
         }
     }
     }
