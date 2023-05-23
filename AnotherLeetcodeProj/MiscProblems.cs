@@ -1204,11 +1204,14 @@ namespace AnotherLeetcodeProj
                 int[] newNums = new int[nums.Length];
                 if (nums.Length == 1)
                     return nums[0];
+                if (nums.Length == 2)
+                    return Math.Max(nums[0], nums[1]);
                 newNums[0] = nums[0];
                 newNums[1] = nums[1];
-                for(int i = 2; i < nums.Length; i++)
+                newNums[2] = nums[2] + nums[0];
+                for (int i = 3; i < nums.Length; i++)
                 {
-                    newNums[i] = newNums[i - 2] + nums[i];
+                    newNums[i] = Math.Max(newNums[i - 2], newNums[i-3]) + nums[i];
                 }
                 return Math.Max(newNums[nums.Length - 1], newNums[nums.Length - 2]);
             }
