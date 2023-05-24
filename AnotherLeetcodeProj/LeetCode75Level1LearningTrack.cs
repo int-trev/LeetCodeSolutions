@@ -73,5 +73,23 @@ namespace AnotherLeetcodeProj
             return false;
         }
         #endregion
+
+        #region Day 3
+        public ListNode MergeTwoLists(ListNode list1, ListNode list2)
+        {
+            if (list1 == null)
+                return list2;
+            while(list1.next != null)
+            {
+                
+            }
+
+            
+        }
+
+
+
+
+        #endregion
     }
 }

@@ -45,5 +45,34 @@ namespace AnotherLeetcodeProj
             return sum;
         }
         #endregion
+        #region Day 2
+        public int[] TwoSum(int[] nums, int target)
+        {
+            int[] indexes = new int[2];
+            Dictionary<int, int> IntAndIndex = new Dictionary<int, int>();
+            for(int i = 0; i < nums.Length; i++)
+            {
+                if(IntAndIndex.ContainsKey(target - nums[i]))
+                {
+                    indexes[0] = IntAndIndex[target - nums[i]];
+                    indexes[1] = i;
+                    break;
+                }
+                else
+                {
+                    if(!IntAndIndex.ContainsKey(nums[i]))
+                        IntAndIndex.Add(nums[i], i);
+                }
+            }
+            return indexes;
+        }
+
+        public void Merge(int[] nums1, int m, int[] nums2, int n)
+        {
+            int pointer1 = 0;
+            int pointer2 = 0;
+            
+        }
+        #endregion
     }
 }
