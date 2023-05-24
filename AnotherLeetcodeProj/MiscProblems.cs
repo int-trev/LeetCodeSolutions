@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Diagnostics.PerformanceData;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -953,29 +954,6 @@ namespace AnotherLeetcodeProj
                 length--;
             }
 
-            public bool IsSameTree(TreeNode p, TreeNode q)
-            {
-                return HelperIsSameTree(p, q);
-            }
-
-            public bool HelperIsSameTree(TreeNode p, TreeNode q)
-            {
-                if ((p == null && q != null) || (p != null && q == null))
-                    return false;
-                else if ((p == null && q == null))
-                    return true;
-                else if ((p.val != q.val))
-                    return false;
-                else
-                    return (HelperIsSameTree(p.left, q.left) && HelperIsSameTree(p.right, q.right));
-            }
-
-            public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
-            {
-                //make a recursive method that checks if p and q are found in any of its children
-                //return the upper most node where this occurs
-            }
-
             public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
             {
                 bool carrydigit = false;
@@ -1215,7 +1193,26 @@ namespace AnotherLeetcodeProj
                 }
                 return Math.Max(newNums[nums.Length - 1], newNums[nums.Length - 2]);
             }
-            #endregion
+
+            public int CoinChange(int[] coins, int amount)
+            {
+                return RecursiveCoinChange(coins, amount, 0, 0, 0);
+            }
+
+            public int RecursiveCoinChange(int[] coins, int amount, int numChosen, int counter, int index)
+            {
+                if (index >= coins.Length)
+                    return -1;
+                if (counter > amount)
+                    return -1;
+                if (counter == amount)
+                    return numChosen;
+                var chooseThis = RecursiveCoinChange(coins, amount, numChosen + 1, counter + coins[index], index);
+                var chooseOther = RecursiveCoinChange(coins, amount, numChosen, counter + coins[index], index + 1);
+                if (chooseThis < 0 || chooseOther < 0)
+                    return Math.Max(chooseThis, chooseOther);
+                return Math.Min(chooseThis, chooseOther);
+            }
 
             public int Tribonacci(int n)
             {
@@ -1226,7 +1223,7 @@ namespace AnotherLeetcodeProj
                 int first = 0;
                 int second = 1;
                 int third = 1;
-                for(int i = 3; i <= n; i++)
+                for (int i = 3; i <= n; i++)
                 {
                     int temp = first + second + third;
                     first = second;
@@ -1235,6 +1232,72 @@ namespace AnotherLeetcodeProj
                 }
                 return third;
             }
+
+
+            #endregion
+
+            #region Trees
+            public int GoodNodes(TreeNode root)
+            {
+                return HelperGoodNodes(root, int.MinValue);
+            }
+
+            public int HelperGoodNodes(TreeNode root, int max)
+            {
+                if (root == null)
+                    return 0;
+                if(root.val >= max)
+                {
+                    return 1 + HelperGoodNodes(root.left, root.val) + HelperGoodNodes(root.right, root.val);
+                }
+                else
+                    return HelperGoodNodes(root.left, max) + HelperGoodNodes(root.right, max);
+            }
+
+            public bool IsSameTree(TreeNode p, TreeNode q)
+            {
+                return HelperIsSameTree(p, q);
+            }
+
+            public bool HelperIsSameTree(TreeNode p, TreeNode q)
+            {
+                if ((p == null && q != null) || (p != null && q == null))
+                    return false;
+                else if ((p == null && q == null))
+                    return true;
+                else if ((p.val != q.val))
+                    return false;
+                else
+                    return (HelperIsSameTree(p.left, q.left) && HelperIsSameTree(p.right, q.right));
+            }
+
+
+            public bool IsValidBST(TreeNode root)
+            {
+                return HelperIsValidBST(root);
+            }
+            //do I need to keep track of the maxes of each subtree?
+            public bool HelperIsValidBST(TreeNode root)
+            {
+                if (root == null)
+                    return true;
+                else if ((root.left == null || root.val > root.left.val) && (root.right == null || root.val < root.right.val))
+                {
+                    return true && HelperIsValidBST(root.left) && HelperIsValidBST(root.right);
+                }
+                else
+                    return false;
+            }
+
+
+
+
+            public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+            {
+                //make a recursive method that checks if p and q are found in any of its children
+                //return the upper most node where this occurs
+            }
+            #endregion
 
             #region Queues
             //https://leetcode.com/problems/implement-stack-using-queues/
@@ -1266,6 +1329,215 @@ namespace AnotherLeetcodeProj
 
                 }
             }
+            #endregion
+
+            #region Amazon Spring 23 High Frequency
+            public int KthFactor(int n, int k)
+            {
+                List<int> factors = new List<int>();
+                int indexInsert = 0;
+                for(int i = 1; i <= n; i++)
+                {
+                    if(n % i == 0 && n/i >= i)
+                    {
+                        //add i to factors at index
+                        factors.Insert(indexInsert, i);
+                        if(n/i != i)
+                            //add n/i to factors at index + 1
+                            factors.Insert(indexInsert + 1, n / i);
+                        //add 1 to index
+                        indexInsert++;
+                    }
+                }
+
+                foreach (var factor in factors)
+                    Console.WriteLine(factor);
+
+                if (k > factors.Count)
+                    return -1;
+                else
+                    return factors[k-1];
+            }
+
+            public int PartitionString(string s)
+            {
+                //have a hash set
+                //work through the string, adding to the hash set when you see character NOT in there
+                //when see one in there, add to the partition count and empty the hash set
+                HashSet<int> helper = new HashSet<int>();
+                int partitionCounter = 0;
+                foreach(var character in s)
+                {
+                    if(helper.Contains(character))
+                    {
+                        helper = new HashSet<int>();
+                        helper.Add(character);
+                        partitionCounter++;
+                    }
+                    else
+                    {
+                        helper.Add(character);
+                    }
+                }
+                return partitionCounter+1;
+            }
+            #endregion
+
+            #region Programming Skills Basic Implementation
+            public string MergeAlternately(string word1, string word2)
+            {
+                int word1Pointer = 0;
+                int word2Pointer = 0;
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while(word1Pointer != word1.Length && word2Pointer != word2.Length)
+                {
+                    stringBuilder.Append(word1[word1Pointer]);
+                    stringBuilder.Append(word2[word2Pointer]);
+                    word2Pointer++;
+                    word1Pointer++;
+                }
+
+                while(word1Pointer != word1.Length)
+                {
+                    stringBuilder.Append(word1[word1Pointer]);
+                    word1Pointer++;
+                }
+
+                while (word2Pointer != word2.Length)
+                {
+                    stringBuilder.Append(word2[word2Pointer]);
+                    word2Pointer++;
+                }
+
+                return stringBuilder.ToString();
+            }
+
+            public int StrStr(string haystack, string needle)
+            {
+                int needlePointer = 0;
+
+                for(int i = 0; i < haystack.Length; i++)
+                {
+                    if (haystack[i] == needle[needlePointer])
+                    {
+                        needlePointer++;
+                        if (needlePointer == needle.Length)
+                            return i - needlePointer + 1;
+                    }
+                    else
+                    {
+                        i = i - needlePointer;
+                        needlePointer = 0;
+                    }
+                }
+                return -1;
+            }
+
+            public char FindTheDifference(string s, string t)
+            {
+                int[] sHash = new int[26];
+                int[] tHash = new int[26];
+
+                foreach (var character in s)
+                {
+                    sHash[character - 97]++;
+                }
+
+                foreach (var character in t)
+                {
+                    tHash[character - 97]++;
+                }
+
+                for (int i = 0; i < 26; i++)
+                {
+                    if (sHash[i] != tHash[i])
+                        return ((char)(i + 97));
+                }
+
+                return 'a';
+            }
+
+            public void MoveZeroes(int[] nums)
+            {
+                int zeroPointer = -1;
+                int regularPointer = 0;
+
+                while(regularPointer < nums.Length)
+                {
+                    if(nums[regularPointer] != 0 && zeroPointer != -1)
+                    {
+                        //swap them here
+                        nums[zeroPointer] = nums[regularPointer];
+                        nums[regularPointer] = 0;
+                        while (nums[zeroPointer] != 0)
+                            zeroPointer++;
+                        //set zero pointer = -1 again
+                    }
+
+                    if (nums[regularPointer] == 0 && zeroPointer == -1)
+                    {
+                        zeroPointer = regularPointer;
+                    }
+
+                    regularPointer++;
+                }
+
+            }
+
+            public int[] PlusOne(int[] digits)
+            {
+                bool carryOver = false;
+                digits[digits.Length - 1]++;
+                for (int i = digits.Length - 1; i >= 0; i--)
+                {
+                    if(carryOver)
+                    {
+                        digits[i] = digits[i] + 1;
+                    }
+                    if (digits[i] >= 10)
+                    {
+                        digits[i] = digits[i] % 10;
+                        carryOver = true;
+                    }
+                    else
+                        carryOver = false;
+                }
+
+                if(carryOver)
+                {
+                    int[] newDigits = new int[digits.Length + 1];
+                    newDigits[0] = 1;
+                    for(int i = 1; i < newDigits.Length; i++)
+                    {
+                        newDigits[i] = digits[i - 1];
+                    }
+                    return newDigits;
+                }
+
+                return digits;
+            }
+
+            public int ArraySign(int[] nums)
+            {
+                bool positive = true;
+                for(int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] < 0)
+                        positive = !positive;
+
+                    if (nums[i] == 0)
+                    {
+                        return 0;
+                    }
+                }
+
+                if (positive)
+                    return 1;
+                return -1;
+            }
+
+
             #endregion
 
         }
