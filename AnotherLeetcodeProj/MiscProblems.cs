@@ -1537,7 +1537,219 @@ namespace AnotherLeetcodeProj
                 return -1;
             }
 
+            public bool IsMonotonic(int[] nums)
+            {
+                bool decreasing = true;
+                bool increasing = true;
 
+                for(int i = 1; i < nums.Length; i++)
+                {
+                    if(nums[i] < nums[i-1])
+                        increasing = false;
+                    if(nums[i] > nums[i-1])
+                        decreasing = false;
+                }
+
+                return decreasing || increasing;
+
+            }
+
+            public bool CanMakeArithmeticProgression(int[] arr)
+            {
+                var newArr = arr.ToList();
+                newArr.Sort();
+                int diff = newArr[1] - newArr[0];
+                for (int i = 2; i < newArr.Count; i++)
+                {
+                    if (newArr[i] - newArr[i - 1] != diff)
+                        return false;
+                }
+                return true;
+            }
+
+            public int LengthOfLastWord(string s)
+            {
+                int length = 0;
+                for(int i = s.Length - 1; i >= 0; i--)
+                {
+                    if (s[i] != ' ')
+                    {
+                        //start counting here
+                        while(s[i] != ' ' && i >= 0)
+                        {
+                            i--;
+                            length++;
+                            if (i < 0)
+                                break;
+                        }
+                        break;
+                    }
+                }
+                return length;
+            }
+
+            public bool JudgeCircle(string moves)
+            {
+                int vertical = 0;
+                int horizontal = 0;
+                foreach(char move in moves)
+                {
+                    switch (move)
+                    {
+                        case 'U':
+                            vertical++;
+                            break;
+                        case 'D':
+                            vertical--;
+                            break;
+                        case 'L':
+                            horizontal--;
+                            break;
+                        case 'R':
+                            horizontal++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (vertical == 0 && horizontal == 0)
+                    return true;
+                return false;
+            }
+
+            public bool IsRobotBounded(string instructions)
+            {
+                int frontPointer = 0;
+                int backPointer = 0;
+            }
+
+            public string Tictactoe(int[][] moves)
+            {
+                //create 3x3 matrix
+                char[][] tictactoeboard = new char[3][];
+                for(int i = 0; i < 3;i++)
+                {
+                    tictactoeboard[i] = new char[3];
+                }
+
+                //add the moves to the tictac board
+
+                bool xMove = true;
+                foreach(var move in moves)
+                {
+                    if (xMove)
+                        tictactoeboard[move[0]][move[1]] = 'A';
+                    else
+                        tictactoeboard[move[0]][move[1]] = 'B';
+                    xMove = !xMove;
+                }
+                //need to write way to validate the board
+                
+                //check all rows
+                for(int i = 0; i < 3; i++)
+                {
+                    if (tictactoeboard[i][0] != 0 && tictactoeboard[i][0] == tictactoeboard[i][1] && tictactoeboard[i][1] == tictactoeboard[i][2])
+                    {
+                        return tictactoeboard[i][0].ToString();
+                    }
+                }
+
+
+
+                //check all columns
+                for (int i = 0; i < 3; i++)
+                {
+                    if (tictactoeboard[0][i] != 0 && tictactoeboard[0][i] == tictactoeboard[1][i] && tictactoeboard[1][i] == tictactoeboard[2][i])
+                    {
+                        return tictactoeboard[0][i].ToString();
+                    }
+                }
+
+
+                //check diagonals
+                if (tictactoeboard[0][0] != 0 && tictactoeboard[0][0] == tictactoeboard[1][1] && tictactoeboard[1][1] == tictactoeboard[2][2])
+                {
+                    return tictactoeboard[0][0].ToString();
+                }
+
+                if (tictactoeboard[2][0] != 0 && tictactoeboard[2][0] == tictactoeboard[1][1] && tictactoeboard[1][1] == tictactoeboard[0][2])
+                {
+                    return tictactoeboard[1][1].ToString();
+                }
+
+
+                //if all full, return draw
+                if (moves.Length == 9)
+                    return "Draw";
+
+                //else return pending
+                return "Pending";
+            }
+
+            public int MaximumWealth(int[][] accounts)
+            {
+                int max = int.MinValue;
+                foreach(var account in accounts)
+                {
+                    int sum = 0;
+                    foreach(var value in account)
+                    {
+                        sum += value;
+                    }
+                    if(sum > max)
+                        max = sum;
+                }
+                return max;
+            }
+
+            public void Rotate(int[] nums, int k)
+            {
+                
+            }
+
+            #endregion
+
+            #region Misc
+            public bool CheckRecord(string s)
+            {
+                bool recordCheck = false;
+                int Acounter = 0;
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (s[i] == 'A')
+                    {
+                        Acounter++;
+                        if(Acounter == 2)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if(s[i] == 'L')
+                    {
+                        i++;
+                        int Lcounter = 1;
+                        while(i < s.Length)
+                        {
+                            if(s[i] == 'L')
+                            {
+                                Lcounter++;
+                                i++;
+                                if(Lcounter >= 3)
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
             #endregion
 
         }
