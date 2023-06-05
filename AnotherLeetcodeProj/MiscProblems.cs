@@ -1274,19 +1274,28 @@ namespace AnotherLeetcodeProj
 
             public bool IsValidBST(TreeNode root)
             {
-                return HelperIsValidBST(root);
-            }
-            //do I need to keep track of the maxes of each subtree?
-            public bool HelperIsValidBST(TreeNode root)
-            {
-                if (root == null)
-                    return true;
-                else if ((root.left == null || root.val > root.left.val) && (root.right == null || root.val < root.right.val))
+                //need to have some way to track maxes
+                Queue<TreeNode> queue = new Queue<TreeNode>();
+                queue.Enqueue(root);
+                while(queue.Count > 0)
                 {
-                    return true && HelperIsValidBST(root.left) && HelperIsValidBST(root.right);
+                    var temp = queue.Dequeue();
+                    if (temp == null || (temp.left == null && temp.right == null))
+                        continue;
+                    if(temp.left != null && temp.left.val >= temp.val)
+                    {
+                        return false;
+                    }
+
+                    if (temp.right != null && temp.right.val <= temp.val)
+                    {
+                        return false;
+                    }
+
+                    queue.Enqueue(temp.left);
+                    queue.Enqueue(temp.right);
                 }
-                else
-                    return false;
+                return true;
             }
 
 
@@ -1297,6 +1306,62 @@ namespace AnotherLeetcodeProj
                 //make a recursive method that checks if p and q are found in any of its children
                 //return the upper most node where this occurs
             }
+
+            public IList<int> RightSideView(TreeNode root)
+            {
+                //basically, at every depth level, have to check what the right most value at that depth is
+                //could use a queue based system
+                //queue of tuples with tree node and depth?
+                if (root == null)
+                    return new int[0];
+                List<int> tracker = new List<int> ();
+                Queue<Tuple<TreeNode, int>> queue = new Queue<Tuple<TreeNode, int>>();
+                queue.Enqueue(new Tuple<TreeNode, int>(root, 0));
+                while(queue.Count > 0)
+                {
+                    var tempNode = queue.Dequeue();
+                    if (tracker.Count == tempNode.Item2)
+                        tracker.Add(tempNode.Item1.val);
+                    else
+                    {
+                        tracker[tempNode.Item2] = tempNode.Item1.val;
+                    }
+
+                    if (tempNode.Item1.left != null)
+                        queue.Enqueue(new Tuple<TreeNode, int>(tempNode.Item1.left, tempNode.Item2 + 1));
+                    if(tempNode.Item1.right != null)
+                        queue.Enqueue(new Tuple<TreeNode, int>(tempNode.Item1.right, tempNode.Item2 + 1));
+
+                    //enqueue the left and then the right
+                    //in theory, this should do the right most one?
+                }
+
+                return tracker.ToArray();
+
+            }
+
+            public int KthSmallest(TreeNode root, int k)
+            {
+                //go as far down left as I can go
+                //add along the way
+                //then add the right of the node
+                //take that list and return the k
+                List<int> ints = new List<int>();
+                KthSmallestHelper(root, k, ints);
+                return ints[k-1];
+
+            }
+
+            public void KthSmallestHelper(TreeNode root, int k, List<int> ints)
+            {
+                if (root == null)
+                    return;
+                KthSmallestHelper(root.left, k, ints);
+                ints.Add(root.val);
+                KthSmallestHelper(root.right, k, ints);  
+            }
+
+
             #endregion
 
             #region Queues
@@ -1325,6 +1390,26 @@ namespace AnotherLeetcodeProj
                 }
 
                 public bool Empty()
+                {
+
+                }
+            }
+            #endregion
+
+            #region Heap/Priority Queue
+            public class KthLargest
+            {
+                private class Item
+                {
+                    int val;
+                    int priority;
+                }
+                public KthLargest(int k, int[] nums)
+                {
+
+                }
+
+                public int Add(int val)
                 {
 
                 }
