@@ -444,16 +444,65 @@ namespace AnotherLeetcodeProj
 
         public int HelperSearch(int[] nums, int target, int startingBound, int endingBound)
         {
-            int middle = (endingBound - startingBound) / 2;
+            int middle = startingBound + (endingBound - startingBound) / 2;
             if (nums[middle] == target)
-                return target;
-            else if (startingBound == endingBound)
+                return middle;
+            else if (startingBound >= endingBound)
                 return -1;
             else if (nums[middle] > target)
-                return HelperSearch(nums, target, startingBound, middle-1);
+                return HelperSearch(nums, target, startingBound, middle);
             else
-                return HelperSearch(nums, target, middle+1, endingBound);
+                return HelperSearch(nums, target, middle + 1, endingBound);
         }
+
+        public bool SearchMatrix(int[][] matrix, int target)
+        {
+            int rowIndex = FindRowIndexHelper(matrix, target, 0, matrix.Length - 1);
+            if (rowIndex == -1)
+                return false;
+            
+            return HelperSearchFind(matrix[rowIndex], target, 0, matrix[rowIndex].Length - 1);
+
+
+        }
+
+        private int FindRowIndexHelper(int[][] matrix, int target, int lowRow, int highRow)
+        {
+            //breaking condition is that it doesnt belong in that row...
+
+            //if belongs in middle row
+            //return middleIndex
+            int middle = lowRow + (highRow - lowRow) / 2;
+            if (matrix[middle][0] <= target && matrix[middle][matrix[middle].Length - 1] >= target)
+                return middle;
+            else if (lowRow >= highRow)
+                return -1;
+            //return searchforlower
+            else if (matrix[middle][0] > target)
+                return FindRowIndexHelper(matrix, target, lowRow, middle);
+            else
+                return FindRowIndexHelper(matrix, target, middle + 1, highRow);
+
+            //if higher
+            //return search for higher
+        }
+
+        public bool HelperSearchFind(int[] nums, int target, int startingBound, int endingBound)
+        {
+            int middle = startingBound + (endingBound - startingBound) / 2;
+            if (nums[middle] == target)
+                return true;
+            else if (startingBound >= endingBound)
+                return false;
+            else if (nums[middle] > target)
+                return HelperSearchFind(nums, target, startingBound, middle);
+            else
+                return HelperSearchFind(nums, target, middle + 1, endingBound);
+        }
+
+
+
+
 
         public IList<string> GenerateParenthesis(int n)
         {
@@ -1361,6 +1410,17 @@ namespace AnotherLeetcodeProj
                 KthSmallestHelper(root.right, k, ints);  
             }
 
+            public bool IsBalanced(TreeNode root)
+            {
+
+            }
+
+            public int IsBalancedHelper(TreeNode root)
+            {
+                //find depth of each subtree
+                //if the depth differs by > 1, its no good
+            }
+
 
             #endregion
 
@@ -1837,6 +1897,39 @@ namespace AnotherLeetcodeProj
             }
             #endregion
 
+            public ListNode ReverseKGroup(ListNode head, int k)
+            {
+                Stack<ListNode> stack = new Stack<ListNode>();
+                ListNode prev = null;
+                var tempIterator = head;
+                while (tempIterator != null)
+                {
+                    stack.Push(tempIterator);
+                    if(stack.Count == k)
+                    {
+                        tempIterator = tempIterator.next;
+                        while(stack.Count != 0)
+                        {
+                            if (prev == null)
+                            {
+                                head = stack.Peek();
+                            }
+                            else
+                                prev.next = stack.Peek();
+                            prev = stack.Pop();
+                        }
+                    }
+                    else
+                        tempIterator = tempIterator.next;      
+                }
+                return head;
+                //have a stack
+                //hae one thing as the iterator?
+                //when the stack hits k amount in it, empty it, link them up
+                    //if the first one, make the head the first popped
+                    //if not the first loop, link up the previous to the first popped
+
+            }
         }
     }
     }
