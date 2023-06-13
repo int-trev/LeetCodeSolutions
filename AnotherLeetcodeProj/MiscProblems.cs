@@ -69,7 +69,56 @@ namespace AnotherLeetcodeProj
 
         public IList<IList<string>> GroupAnagrams(string[] strs)
         {
-            return null;
+            //have a list of alphabet arrays
+            //have a running list of what we need
+            List<int[]> alphabetArrays = new List<int[]>();
+            List<List<string>> returnedList = new List<List<string>>();
+            foreach(string str in strs)
+            {
+                //make new alphabet array
+                int[] tempAlphabetRay = new int[26];
+                //hash the string
+                foreach(var character in str)
+                {
+                    tempAlphabetRay[character - 97]++;
+                }
+                //loop through the alphabet arrays and check if there are any that contain the same amount
+                //if so, insert into that index in returned list and we are good
+                bool found = false;
+                int alphabetRayIndex = 0;
+                for(alphabetRayIndex = 0; alphabetRayIndex < alphabetArrays.Count; alphabetRayIndex++)
+                {
+                    for(int i = 0; i < 26; i++)
+                    {
+                        if (alphabetArrays[alphabetRayIndex][i] != tempAlphabetRay[i])
+                            break;
+                        if (i == 25)
+                            found = true;
+                    }
+
+                    if (found)
+                        break;
+                }
+
+                if(found)
+                {
+                    returnedList[alphabetRayIndex].Add(str);
+                }
+                else
+                {
+                    alphabetArrays.Add(tempAlphabetRay);
+                    List<string> list = new List<string>();
+                    list.Add(str);
+                    returnedList.Add(list);
+                }
+
+                //else, add the new alphabet array to the list of rays
+                //add a new list to returned list and add the string to it
+
+                //done
+
+            }
+            return returnedList.ToArray();
         }
 
         public int[] TopKFrequent(int[] nums, int k)
@@ -1928,6 +1977,29 @@ namespace AnotherLeetcodeProj
                 //when the stack hits k amount in it, empty it, link them up
                     //if the first one, make the head the first popped
                     //if not the first loop, link up the previous to the first popped
+
+            }
+
+
+            //doing something wrong but the right idea
+            public int FindMin(int[] nums)
+            {
+                return FindMinHelper(nums, 0, nums.Length-1);
+            }
+
+
+            public int FindMinHelper(int[] nums, int low, int high)
+            {
+                int mid = low + ((high - low) / 2);
+                //look at low vs high vs mid?
+                //if the low is less than the middle,  go lower
+                //if the high is less than the middle, go high
+                if (low == high)
+                    return nums[mid];
+                else if (nums[low] <= nums[mid] && nums[low] <= nums[high])
+                    return FindMinHelper(nums, low, mid);
+                else
+                    return FindMinHelper(nums, mid + 1, high);
 
             }
         }
