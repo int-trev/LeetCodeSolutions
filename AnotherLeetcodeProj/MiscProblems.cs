@@ -1508,19 +1508,46 @@ namespace AnotherLeetcodeProj
             #region Heap/Priority Queue
             public class KthLargest
             {
-                private class Item
-                {
-                    int val;
-                    int priority;
-                }
+                private List<int> newNums;
+                private int k;
                 public KthLargest(int k, int[] nums)
                 {
-
+                    newNums = nums.ToList();
+                    newNums.Sort();
+                    this.k = k;
                 }
 
                 public int Add(int val)
                 {
-
+                    int i = 0;
+                    int counter = 1;
+                    int last = newNums[0];
+                    if(k != 1)
+                    {
+                        for (i = 1; i < newNums.Count; i++)
+                        {
+                            if (newNums[i] == last)
+                                continue;
+                            counter++;
+                            last = newNums[i];
+                            if (counter == k)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    int j = 0;
+                    for(j = 0; j < newNums.Count; j++)
+                    {
+                        if (j + 1 == newNums.Count)
+                            break;
+                        if (val <= newNums[j + 1])
+                            break;
+                    }
+                    while (j + 1 < newNums.Count && newNums[j] == newNums[j + 1])
+                        j++;
+                    newNums.Insert(j+1, val);
+                    return last;
                 }
             }
             #endregion
